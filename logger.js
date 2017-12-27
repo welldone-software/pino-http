@@ -34,7 +34,7 @@ function pinoLogger (opts, stream) {
 
     var log = this.log
     var responseTime = Date.now() - this[startTime]
-    const level = getUseLevel(this, err)
+    var level = getUseLevel(this, err)
 
     if (err) {
       log[level]({
