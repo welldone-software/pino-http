@@ -112,7 +112,7 @@ test('uses the get log level passed in as an option', function (t) {
 
   dest.on('data', function (line) {
     t.equal(line.level, 40, 'level')
-    t.notOk(line.getUseLevel, 'useLevel not forwarded')
+    t.notOk(line.getUseLevel, 'getUseLevel not forwarded')
     t.end()
   })
 })
