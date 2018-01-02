@@ -15,9 +15,10 @@ function pinoLogger (opts, stream) {
   opts.serializers.req = wrapReqSerializer(opts.serializers.req || asReqValue)
   opts.serializers.res = wrapResSerializer(opts.serializers.res || asResValue)
   opts.serializers.err = opts.serializers.err || pino.stdSerializers.err
-
   var useLevel = opts.useLevel || 'info'
+  var getUseLevel = opts.getUseLevel || function (res, err) { return err ? 'error' : useLevel }
   delete opts.useLevel
+  delete opts.getUseLevel
 
   var theStream = opts.stream || stream
   delete opts.stream
@@ -33,9 +34,10 @@ function pinoLogger (opts, stream) {
 
     var log = this.log
     var responseTime = Date.now() - this[startTime]
+    var level = getUseLevel(this, err)
 
     if (err) {
-      log.error({
+      log[level]({
         res: this,
         err: err,
         responseTime: responseTime
@@ -43,7 +45,7 @@ function pinoLogger (opts, stream) {
       return
     }
 
-    log[useLevel]({
+    log[level]({
       res: this,
       responseTime: responseTime
     }, 'request completed')
